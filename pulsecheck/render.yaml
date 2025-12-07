@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: pulsecheck-backend
+    env: node
+    root: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 5000
+  - type: static
+    name: pulsecheck-frontend
+    env: static
+    root: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: build

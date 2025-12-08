@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'https://pulsecheck-backend-wqx6.onrender.com/api';
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:10000";
+const API_URL = `${BASE_URL}/api`;
 
 const api = axios.create({
     baseURL: API_URL,

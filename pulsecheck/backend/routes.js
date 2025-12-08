@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('./controllers');
+const controllers = require('./controllers/index.js');
 
-router.post('/saveReading', controller.saveReading);
-router.get('/history', controller.getHistory);
+router.post('/saveReading', controllers.saveReading);
+router.get('/history', controllers.getHistory);
 
 module.exports = router;

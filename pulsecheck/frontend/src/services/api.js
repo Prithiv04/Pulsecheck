@@ -1,39 +1,59 @@
-import axios from 'axios';
+const BACKEND_BASE_URL =
+    import.meta.env.VITE_BACKEND_URL ||
+    "https://pulsecheck-backend-wqx6.onrender.com";
 
-const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:10000";
-const API_URL = `${BASE_URL}/api`;
+export const API_BASE_URL = `${BACKEND_BASE_URL}/api`;
 
-const api = axios.create({
-    baseURL: API_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
+export const getUsers = async () => {
+    const res = await fetch(`${API_BASE_URL}/users`);
+    return res.json();
+};
 
-// Add a request interceptor to include auth token if available (optional/future proof)
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+export const getMoods = async () => {
+    const res = await fetch(`${API_BASE_URL}/moods`);
+    return res.json();
+};
 
-export const authService = {
-    login: (credentials) => api.post('/auth/login', credentials),
-    register: (userData) => api.post('/auth/register', userData),
+export const saveReading = async (readingData) => {
+    const res = await fetch(`${API_BASE_URL}/saveReading`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(readingData)
+    });
+    return res.json();
+};
+
+export const getHistory = async () => {
+    const res = await fetch(`${API_BASE_URL}/history`);
+    return res.json();
+};
+
+export const login = async (credentials) => {
+    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials)
+    });
+    return res.json();
 };
 
 export const userService = {
-    getAllUsers: () => api.get('/users'),
+    getAllUsers: async () => {
+        const data = await getUsers();
+        return { data };
+    }
 };
 
 export const moodService = {
-    getAllMoods: () => api.get('/moods'),
-    saveMood: (moodData) => api.post('/moods', moodData),
+    getAllMoods: async () => {
+        const data = await getMoods();
+        return { data };
+    }
 };
 
-export default api;
+export const authService = {
+    login: async (credentials) => {
+        const data = await login(credentials);
+        return { data };
+    }
+};
